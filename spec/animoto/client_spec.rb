@@ -19,8 +19,8 @@ describe Animoto::Client do
       end
       
       it "should accept an endpoint as an option" do
-        c = Animoto::Client.new "key", "secret", :endpoint => "https://api.animoto.com/"
-        c.endpoint.should == "https://api.animoto.com/"
+        c = Animoto::Client.new "key", "secret", :endpoint => "https://platform.animoto.com/"
+        c.endpoint.should == "https://platform.animoto.com/"
       end
       
       describe "when the secret isn't specified (i.e. only 1 parameter was passed)" do
@@ -46,7 +46,7 @@ describe Animoto::Client do
         @here_path  = File.expand_path("./.animotorc")
         @home_path  = File.expand_path("~/.animotorc")
         @etc_path   = "/etc/.animotorc"
-        @config     = "key: joe\nsecret: secret\nendpoint: https://api.animoto.com/"
+        @config     = "key: joe\nsecret: secret\nendpoint: https://platform.animoto.com/"
       end
       
       describe "when ./.animotorc exists" do
@@ -59,7 +59,7 @@ describe Animoto::Client do
           c = Animoto::Client.new
           c.key.should == "joe"
           c.secret.should == "secret"
-          c.endpoint.should == "https://api.animoto.com/"
+          c.endpoint.should == "https://platform.animoto.com/"
         end
       end
       
@@ -78,7 +78,7 @@ describe Animoto::Client do
             c = Animoto::Client.new
             c.key.should == "joe"
             c.secret.should == "secret"
-            c.endpoint.should == "https://api.animoto.com/"
+            c.endpoint.should == "https://platform.animoto.com/"
           end
         end
       
@@ -112,7 +112,7 @@ describe Animoto::Client do
     
   describe "finding an instance by identifier" do
     before do
-      @url = "https://joe:secret@api.animoto.com/storyboards/1"
+      @url = "https://joe:secret@platform.animoto.com/storyboards/1"
       hash = {'response'=>{'status'=>{'code'=>200},'payload'=>{'storyboard'=>{'links'=>{'self'=>@url,'preview'=>'http://animoto.com/preview/1.mp4'},'metadata'=>{'duration'=>100,'visuals_count'=>1}}}}}
       body = client.response_parser.unparse(hash)
       stub_request(:get, @url).to_return(:body => body, :status => [200,"OK"])
@@ -140,9 +140,9 @@ describe Animoto::Client do
   
   describe "reloading an instance" do
     before do
-      @url = 'https://joe:secret@api.animoto.com/jobs/directing/1'
+      @url = 'https://joe:secret@platform.animoto.com/jobs/directing/1'
       @job = Animoto::Resources::Jobs::Directing.new :state => 'initial', :url => @url
-      hash = {'response'=>{'status'=>{'code'=>200},'payload'=>{'directing_job'=>{'state'=>'retrieving_assets','links'=>{'self'=>@url,'storyboard'=>'http://api.animoto.com/storyboards/1'}}}}}
+      hash = {'response'=>{'status'=>{'code'=>200},'payload'=>{'directing_job'=>{'state'=>'retrieving_assets','links'=>{'self'=>@url,'storyboard'=>'http://platform.animoto.com/storyboards/1'}}}}}
       body = client.response_parser.unparse(hash)
       stub_request(:get, @url).to_return(:body => body, :status => [200,"OK"])
       @job.state.should == 'initial' # sanity check

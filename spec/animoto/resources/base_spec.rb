@@ -17,7 +17,7 @@ describe Animoto::Resources::Base do
 
   describe "identity mapping" do
     before do
-      @url = "https://api.animoto.com/videos/1"
+      @url = "https://platform.animoto.com/videos/1"
       @video = Animoto::Resources::Video.new :url => @url
       @body = {
         'response' => {
@@ -26,7 +26,7 @@ describe Animoto::Resources::Base do
             'video' => {
               'links' => {
                 'download' => "http://animoto.com/videos/1",
-                'storyboard' => "https://api.animoto.com/storyboards/1",
+                'storyboard' => "https://platform.animoto.com/storyboards/1",
                 'self' => @url
               },
               'metadata' => {

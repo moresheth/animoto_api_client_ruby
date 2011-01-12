@@ -48,8 +48,8 @@ module Animoto
         #
         # @example
         #   client = Animoto::Client.new
-        #   storyboard1 = Animoto::Resources::Storyboard.new :url => "https://api.animoto.com/storyboards/1"
-        #   storyboard2 = client.find! Animoto::Resources::Storyboard, "https://api.animoto.com/storyboards/1"
+        #   storyboard1 = Animoto::Resources::Storyboard.new :url => "https://platform.animoto.com/storyboards/1"
+        #   storyboard2 = client.find! Animoto::Resources::Storyboard, "https://platform.animoto.com/storyboards/1"
         #   storyboard1.equal?(storyboard2) # => true
         #
         # @param [Hash{String=>Object}] attributes a hash of attributes for this resource
