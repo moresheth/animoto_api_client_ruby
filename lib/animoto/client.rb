@@ -37,7 +37,7 @@ module Animoto
   class Client
     
     # The default endpoint where requests go.
-    API_ENDPOINT      = "https://api2-sandbox.animoto.com/"
+    API_ENDPOINT      = "https://platform-sandbox.animoto.com/"
     
     # The version of the Animoto API this client targets.
     API_VERSION       = 1
