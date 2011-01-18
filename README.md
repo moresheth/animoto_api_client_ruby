@@ -229,4 +229,4 @@ IN NO EVENT SHALL ANIMOTO BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY SPECIAL, P
 
 You agree to indemnify defend and hold Animoto, its parents, subsidiaries, affiliates, officers and employees, harmless from any liabilities, claims, expenses or demands, including reasonable attorneys’ fees and costs, made by any third party due to or arising out of your use of this software, derivative works created by you, the violation of laws, rules, regulations or these terms, and the infringement of any intellectual property right by your derivative works or by you.
 
-[api_docs]: http://animoto.com/developer/api
+[api_docs]: http://api-documentation.animoto.com/index.html
