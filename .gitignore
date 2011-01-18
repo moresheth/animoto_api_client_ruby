@@ -3,3 +3,4 @@ doc
 *.gem
 integration/*.yml
 .bundle/*
+Gemfile.lock
