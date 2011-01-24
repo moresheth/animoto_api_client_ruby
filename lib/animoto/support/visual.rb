@@ -23,7 +23,7 @@ module Animoto
       def to_hash
         hash = super rescue {}
         hash['spotlit'] = spotlit? unless @spotlit.nil?
-        hash['type'] = self.class.name.split('::').last.gsub(/(^)?([A-Z])/) { "#{'_' unless $1}#{$2.downcase}" }
+        hash['type'] = self.class.name.split('::').last.underscore
         hash
       end
     

@@ -42,7 +42,7 @@ module Animoto
         #
         # @return [String] the inferred content type
         def infer_content_type
-          name.split('::').last.gsub(/(^)?([A-Z])/) { "#{'_' unless $1}#{$2.downcase}" }
+          name.split('::').last.underscore
         end      
       end
     end
