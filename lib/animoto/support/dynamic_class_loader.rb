@@ -2,7 +2,7 @@ module Animoto
   module Support
     module DynamicClassLoader
 
-      # Retrieves the adapter class that the name corresponds to. The name in case- and
+      # Retrieves the adapter class that the name corresponds to. The name is case- and
       # punctuation-insensitive, meaning "SomeModule", "some_module", and "somemodule"
       # are all treated as the same.
       #
