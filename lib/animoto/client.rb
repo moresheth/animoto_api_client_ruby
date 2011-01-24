@@ -18,6 +18,8 @@ require 'animoto/resources/jobs/base'
 require 'animoto/resources/jobs/directing_and_rendering'
 require 'animoto/resources/jobs/directing'
 require 'animoto/resources/jobs/rendering'
+require 'animoto/resources/jobs/storyboard_bundling'
+require 'animoto/resources/jobs/storyboard_unbundling'
 
 require 'animoto/assets/base'
 require 'animoto/assets/footage'
@@ -29,6 +31,8 @@ require 'animoto/manifests/base'
 require 'animoto/manifests/directing'
 require 'animoto/manifests/directing_and_rendering'
 require 'animoto/manifests/rendering'
+require 'animoto/manifests/storyboard_bundling'
+require 'animoto/manifests/storyboard_unbundling'
 
 require 'animoto/http_engines/base'
 require 'animoto/response_parsers/base'
@@ -264,7 +268,7 @@ module Animoto
         options = { :username => @key, :password => @secret }.merge(options)
         @logger.info "Sending request to #{url.inspect} with body #{body}"
         response = http_engine.request(method, url, body, headers, options)
-        @logger.info "Received response #{response}"
+        @logger.info "Received response #{response.inspect}"
         return response_parser.parse(response)
       end
       if code
