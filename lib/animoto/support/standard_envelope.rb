@@ -22,10 +22,10 @@ module Animoto
       # @param [Hash{String=>Object}] envelope a 'standard envelope' hash
       # @return [Class, nil] the class, or nil if either the payload key or the class couldn't be found
       def self.find_class_for envelope
-        if payload_key = ((envelope['response'] || {})['payload'] || {}).keys.first
+        if payload_key = unpack_base_payload(envelope).keys.first
           klass_name = payload_key.camelize
           if /(?:Job|Callback)$/ === klass_name
-            Animoto::Jobs::const_get(klass_name) if Animoto::Jobs::const_defined?(klass_name)
+            Animoto::Resources::Jobs::const_get(klass_name) if Animoto::Resources::Jobs::const_defined?(klass_name)
           else
             Animoto::Resources::const_get(klass_name) if Animoto::Resources::const_defined?(klass_name)
           end
@@ -112,6 +112,8 @@ module Animoto
           }
         end        
       end
+      
+      extend ClassMethods
     end
   end
 end
