@@ -41,7 +41,7 @@ describe Animoto::Manifests::Rendering do
   describe "generating a hash" do
     before do
       @storyboard = Animoto::Resources::Storyboard.new
-      @url = "http://animoto.com/storyboards/1"
+      @url = "http://platform.animoto.com/storyboards/1"
       @storyboard.instance_variable_set(:@url, @url)
       manifest(@storyboard, :resolution => "720p", :framerate => 24, :format => 'flv')
     end
