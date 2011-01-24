@@ -13,14 +13,6 @@ module Animoto
       # @return [Manifests::Rendering]
       attr_reader :rendering_manifest
 
-      # A URL to receive a callback after directing is finished.
-      # @return [String]
-      attr_accessor :http_callback_url
-      
-      # The format of the callback; either 'xml' or 'json'.
-      # @return [String]
-      attr_accessor :http_callback_format
-
       # Creates a new directing-and-rendering manifest.
       #
       # @param [Hash{Symbol=>Object}] options
@@ -31,12 +23,11 @@ module Animoto
       # @option options [String] :format the format of the rendered video
       # @option options [String] :http_callback_url a URL to receive a callback when this job is done
       # @option options [String] :http_callback_format the format of the callback
-      def initialize options = {}        
+      # @return [Manifests::DirectingAndRendering] the manifest
+      def initialize options = {}
+        super
         @directing_manifest = Manifests::Directing.new(options.only(:title, :pacing))
         @rendering_manifest = Manifests::Rendering.new(options.only(:resolution, :framerate, :format))
-        
-        @http_callback_url  = options[:http_callback_url]
-        @http_callback_format = options[:http_callback_format]
       end
 
       # Delegates method calls to the underlying directing or rendering manifests if
@@ -63,11 +54,7 @@ module Animoto
       def to_hash options = {}
         hash  = { 'directing_and_rendering_job' => {} }
         job   = hash['directing_and_rendering_job']
-        if http_callback_url
-          raise ArgumentError, "You must specify a http_callback_format (either 'xml' or 'json')" if http_callback_format.nil?
-          job['http_callback'] = http_callback_url
-          job['http_callback_format'] = http_callback_format
-        end
+        add_callback_information job
         job['directing_manifest'] = self.directing_manifest.to_hash['directing_job']['directing_manifest']
         job['rendering_manifest'] = self.rendering_manifest.to_hash['rendering_job']['rendering_manifest']
         hash

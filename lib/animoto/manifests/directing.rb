@@ -11,14 +11,6 @@ module Animoto
       # @return [String]
       attr_accessor :pacing
       
-      # A URL to receive a callback after directing is finished.
-      # @return [String]
-      attr_accessor :http_callback_url
-      
-      # The format of the callback; either 'xml' or 'json'.
-      # @return [String]
-      attr_accessor :http_callback_format
-
       # The array of Visual objects in this manifest.
       # @return [Array<Support::Visual>]
       attr_reader   :visuals
@@ -40,13 +32,12 @@ module Animoto
       # @option options [String] :http_callback_format the format of the callback
       # @return [Manifests::Directing] the manifest
       def initialize options = {}
+        super
         @title      = options[:title]
         @pacing     = options[:pacing] || 'default'
         @style      = 'original'
         @visuals    = []
         @song       = nil
-        @http_callback_url  = options[:http_callback_url]
-        @http_callback_format = options[:http_callback_format]
       end
 
       # Adds a TitleCard to this manifest.
@@ -124,11 +115,7 @@ module Animoto
       def to_hash options = {}
         hash = { 'directing_job' => { 'directing_manifest' => {} } }
         job  = hash['directing_job']
-        if http_callback_url
-          raise ArgumentError, "You must specify a http_callback_format (either 'xml' or 'json')" if http_callback_format.nil?
-          job['http_callback'] = http_callback_url
-          job['http_callback_format'] = http_callback_format
-        end
+        add_callback_information job
         manifest = job['directing_manifest']
         manifest['style'] = style
         manifest['pacing'] = pacing if pacing

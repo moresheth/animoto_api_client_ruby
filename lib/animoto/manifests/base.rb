@@ -4,12 +4,30 @@ module Animoto
     # @abstract
     class Base
       include Support::ContentType
-    
+            
       # @return [String]
       def self.infer_content_type
         super + '_manifest'
       end
-            
+    
+      # A URL to receive a callback after directing is finished.
+      # @return [String]
+      attr_accessor :http_callback_url
+      
+      # The format of the callback; either 'xml' or 'json'.
+      # @return [String]
+      attr_accessor :http_callback_format
+
+      # Creates a new manifest
+      #
+      # @param [Hash{Symbol=>Object}] options
+      # @option options [String] :http_callback_url a URL to receive a callback when this job is done
+      # @option options [String] :http_callback_format the format of the callback
+      def initialize options = {}
+        @http_callback_url  = options[:http_callback_url]
+        @http_callback_format = options[:http_callback_format]
+      end
+
       # Returns a representation of this manifest as a Hash, used to populate
       # request bodies when directing, rendering, etc.
       #
@@ -17,7 +35,21 @@ module Animoto
       def to_hash
         {}
       end
-    
+      
+      private
+      
+      # Helper method to put the standard HTTP callback information into the manifest hash
+      #
+      # @param [Hash{String=>Object}] job_hash the hash version of the 'job' portion of this manifest
+      # @return [void]
+      # @raise [ArgumentError] if a callback url is specified but not the format
+      def add_callback_information job_hash
+        if http_callback_url
+          raise ArgumentError, "You must specify a http_callback_format (either 'xml' or 'json')" if http_callback_format.nil?
+          job_hash['http_callback'] = http_callback_url
+          job_hash['http_callback_format'] = http_callback_format
+        end
+      end
     end
   end
 end

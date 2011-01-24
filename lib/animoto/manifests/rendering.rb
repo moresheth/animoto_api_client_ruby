@@ -16,16 +16,8 @@ module Animoto
       attr_accessor :format
       
       # The storyboard this rendering targets.
-      # @return [Assets::Storyboard]
+      # @return [Resources::Storyboard]
       attr_accessor :storyboard
-      
-      # A URL to receive a callback after directing is finished.
-      # @return [String]
-      attr_accessor :http_callback_url
-      
-      # The format of the callback; either 'xml' or 'json'.
-      # @return [String]
-      attr_accessor :http_callback_format
       
       # Creates a new rendering manifest.
       #
@@ -39,12 +31,11 @@ module Animoto
       # @return [Manifests::Rendering] the manifest
       def initialize *args
         options = args.last.is_a?(Hash) ? args.pop : {}
+        super(options)
         @storyboard = args.shift
         @resolution = options[:resolution]
         @framerate  = options[:framerate]
         @format     = options[:format]
-        @http_callback_url = options[:http_callback_url]
-        @http_callback_format = options[:http_callback_format]
       end
     
       # Returns a representation of this manifest as a Hash.
@@ -54,11 +45,7 @@ module Animoto
       def to_hash
         hash  = { 'rendering_job' => { 'rendering_manifest' => { 'rendering_parameters' => {} } } }
         job   = hash['rendering_job']
-        if http_callback_url
-          raise ArgumentError, "You must specify a http_callback_format (either 'xml' or 'json')" if http_callback_format.nil?
-          job['http_callback'] = http_callback_url
-          job['http_callback_format'] = http_callback_format
-        end
+        add_callback_information job
         manifest = job['rendering_manifest']
         manifest['storyboard_url'] = storyboard.url if storyboard
         params = manifest['rendering_parameters']
