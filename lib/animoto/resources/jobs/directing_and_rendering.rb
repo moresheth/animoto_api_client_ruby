@@ -3,8 +3,6 @@ module Animoto
     module Jobs
       class DirectingAndRendering < Animoto::Resources::Jobs::Base
     
-        endpoint '/jobs/directing_and_rendering'
-
         # @return [Hash{Symbol=>Object}]
         # @see Animoto::Support::StandardEnvelope::ClassMethods#unpack_standard_envelope
         def self.unpack_standard_envelope body = {}

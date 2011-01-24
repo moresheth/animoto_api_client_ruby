@@ -15,6 +15,14 @@ module Animoto
           super + '_job'
         end
         
+        def self.endpoint path = nil
+          super || infer_endpoint
+        end
+        
+        def self.infer_endpoint
+          "/jobs/#{name.split('::').last.underscore}"
+        end
+        
         # The URL for this job.
         # @return [String]
         attr_reader :url

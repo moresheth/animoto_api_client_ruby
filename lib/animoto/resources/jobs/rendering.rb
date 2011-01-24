@@ -3,8 +3,6 @@ module Animoto
     module Jobs
       class Rendering < Animoto::Resources::Jobs::Base
     
-        endpoint '/jobs/rendering'
-
         # @return [Hash{Symbol=>Object}]
         # @see Animoto::Support::StandardEvelope::ClassMethods#unpack_standard_envelope
         def self.unpack_standard_envelope body

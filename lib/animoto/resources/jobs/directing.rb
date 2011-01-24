@@ -2,8 +2,6 @@ module Animoto
   module Resources
     module Jobs
       class Directing < Animoto::Resources::Jobs::Base
-    
-        endpoint '/jobs/directing'
 
         # @return [Hash{Symbol=>Object}]
         # @see Animoto::Support::StandardEnvelope::ClassMethods#unpack_standard_envelope
