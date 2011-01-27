@@ -15,8 +15,7 @@ module Animoto
           :password => options[:password],
           :timeout => options[:timeout]
         })
-        check_response response.code, response.body
-        response.body
+        [response.code, response.body]
       end
     end    
   end

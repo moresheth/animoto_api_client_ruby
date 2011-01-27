@@ -14,8 +14,7 @@ module Animoto
           :username => options[:username],
           :password => options[:password]
         })
-        check_response response.code, response.body
-        response.body
+        [response.code, response.body]
       end   
     end    
   end

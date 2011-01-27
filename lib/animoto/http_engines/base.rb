@@ -26,23 +26,11 @@ module Animoto
       # @option options [Integer] :timeout set a timeout
       # @option options [String] :username the authentication username
       # @option options [String] :password the authentication password
-      # @return [String] the response body
+      # @return [Array[Integer,String]] array of status code and response body
       # @raise [AbstractMethodError] if called on the abstract class
       def request method, url, body = nil, headers = {}, options = {}
         raise AbstractMethodError
-      end
-    
-      private
-    
-      # Checks the response and raises an error if the status isn't success.
-      #
-      # @param [Integer] code the HTTP status code
-      # @param [String] body the HTTP response body
-      # @return [void]
-      # @raise [Animoto::Error] if the status isn't between 200 and 299
-      def check_response code, body
-        throw(:fail, [code,body]) unless (200..299).include?(code)
-      end
+      end    
     end
   end
 end

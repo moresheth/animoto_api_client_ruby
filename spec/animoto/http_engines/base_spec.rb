@@ -1,19 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Animoto::HTTPEngines::Base do
-  
-  describe "autoloading subclasses" do
-    before do
-      Animoto::HTTPEngines::Base.const_defined?(:BeefHearts).should be_false
-    end
-    
-    
-    
-    after do
-      Animoto::HTTPEngines::Base.remove_const(:BeefHearts)
-    end
-  end
-  
+describe Animoto::HTTPEngines::Base do  
   describe "making a request" do
     before do
       @engine = Animoto::HTTPEngines::Base.new

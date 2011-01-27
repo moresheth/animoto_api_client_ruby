@@ -8,8 +8,7 @@ module Animoto
       def request method, url, body = nil, headers = {}, options = {}
         curl = build_curl method, url, body, headers, options
         perform curl, method, body
-        check_response curl.response_code, curl.body_str
-        curl.body_str
+        [curl.response_code, curl.body_str]
       end
       
       private
@@ -39,10 +38,16 @@ module Animoto
       # @return [void]
       def perform curl, method, body
         case method
+        when :head
+          curl.http_head
         when :get
           curl.http_get
         when :post
           curl.http_post(body)
+        when :put
+          curl.http_put(body)
+        when :delete
+          curl.http_delete
         end
       end
     end    

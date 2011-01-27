@@ -8,8 +8,7 @@ module Animoto
       def request method, url, body = nil, headers = {}, options = {}
         session = build_session options
         response = session.request method, url, headers, :data => body
-        check_response response.status, response.body
-        response.body
+        [response.status, response.body]
       end
       
       private

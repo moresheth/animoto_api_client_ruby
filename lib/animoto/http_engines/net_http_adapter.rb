@@ -7,8 +7,11 @@ module Animoto
       
       # A map of HTTP verb symbols to the Net::HTTP classes that handle them.
       HTTP_METHOD_MAP   = {
-        :get  => Net::HTTP::Get,
-        :post => Net::HTTP::Post
+        :head   => Net::HTTP::Head,
+        :get    => Net::HTTP::Get,
+        :post   => Net::HTTP::Post,
+        :put    => Net::HTTP::Put,
+        :delete => Net::HTTP::Delete
       }
       
       # @return [String]
@@ -17,8 +20,7 @@ module Animoto
         http = build_http uri
         req = build_request method, uri, body, headers, options        
         response = http.request req
-        check_response response.code.to_i, response.body
-        response.body
+        [response.code.to_i, response.body]
       end
       
       private
