@@ -9,6 +9,16 @@ module Animoto
       def self.infer_content_type
         super + '_manifest'
       end
+      
+      # Returns the Resources::Jobs::Base descendant class associated with this manifest class
+      # (that is, the type of job returned when a manifest of this type is posted).
+      #
+      # @example
+      #   Manifests::Directing.associated_job_class # => Resources::Jobs::Directing
+      # @return [Class] the associated job class
+      def self.associated_job_class
+        Resources::Jobs.const_get(self.name.split('::').last)
+      end
     
       # A URL to receive a callback after directing is finished.
       # @return [String]
@@ -34,6 +44,14 @@ module Animoto
       # @return [Hash{String=>Object}] the manifest as a Hash
       def to_hash
         {}
+      end
+      
+      # Returns the Resources::Jobs::Base descendant class associated with this manifest (that is,
+      # the type of job that will be returned when this manifest is posted).
+      #
+      # @return [Class] the associated job class
+      def associated_job_class
+        self.class.associated_job_class
       end
       
       private
