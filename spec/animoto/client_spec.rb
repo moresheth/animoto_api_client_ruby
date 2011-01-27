@@ -142,15 +142,227 @@ describe Animoto::Client do
     before do
       @url = 'https://joe:secret@platform.animoto.com/jobs/directing/1'
       @job = Animoto::Resources::Jobs::Directing.new :state => 'initial', :url => @url
-      hash = {'response'=>{'status'=>{'code'=>200},'payload'=>{'directing_job'=>{'state'=>'retrieving_assets','links'=>{'self'=>@url,'storyboard'=>'http://platform.animoto.com/storyboards/1'}}}}}
+      hash = {'response'=>{'status'=>{'code'=>200},'payload'=>{'directing_job'=>{'state'=>'retrieving_assets','links'=>{'self'=>@url,'storyboard'=>'https://platform.animoto.com/storyboards/1'}}}}}
       body = client.response_parser.unparse(hash)
       stub_request(:get, @url).to_return(:body => body, :status => [200,"OK"])
       @job.state.should == 'initial' # sanity check
+    end
+    
+    it "should make a GET request to the resource's url" do
+      client.reload!(@job)
+      WebMock.should have_requested(:get, @job.url)
+    end
+    
+    it "should ask for a response in the proper format" do
+      client.reload!(@job)
+      WebMock.should have_requested(:get, @job.url).with(:headers => { 'Accept' => "application/vnd.animoto.directing_job-v1+json" })
+    end
+    
+    it "should not send a request body" do
+      client.reload!(@job)
+      WebMock.should have_requested(:get, @job.url).with(:body => "")
     end
     
     it "should update the resource's attributes" do
       client.reload!(@job)
       @job.state.should == 'retrieving_assets'
     end
-  end  
+  end
+  
+  describe "deleting an instance" do
+    before do
+      @url = 'https://joe:secret@platform.animoto.com/storyboards/1'
+      @storyboard = Animoto::Resources::Storyboard.new :url => @url
+      stub_request(:delete, @url).to_return(:body => nil, :status => [204,"No Content"])
+    end
+    
+    it "should make a DELETE request to the resource's url" do
+      client.delete!(@storyboard)
+      WebMock.should have_requested(:delete, @storyboard.url)
+    end
+    
+    it "should not send a request body" do
+      client.delete!(@storyboard)
+      WebMock.should have_requested(:delete, @storyboard.url).with(:body => "")
+    end
+    
+    it "should return true if successful" do
+      client.delete!(@storyboard).should equal(true)
+    end
+    
+    it "should raise an error if unsuccessful" do
+      stub_request(:delete, @url).to_return(:body => nil, :status => [404,"Not Found"])
+      lambda { client.delete!(@storyboard) }.should raise_error(Animoto::HTTPError)
+    end
+  end
+  
+  describe "directing" do
+    before do
+      @manifest = Animoto::Manifests::Directing.new
+      hash = {'response'=>{'status'=>{'code'=>201},'payload'=>{'directing_job'=>{'state'=>'retrieving_assets','links'=>{'self'=>'https://platform.animoto.com/jobs/directing/1'}}}}}
+      body = client.response_parser.unparse(hash)
+      @endpoint = client.endpoint.sub('https://','https://joe:secret@').chomp('/') + Animoto::Resources::Jobs::Directing.endpoint
+      stub_request(:post, @endpoint).to_return(:body => body, :status => [201,"Created"])
+    end
+    
+    it "should make a POST request to the directing jobs' endpoint" do
+      client.direct!(@manifest)
+      WebMock.should have_requested(:post, @endpoint)
+    end
+    
+    it "should ask for a response in the proper format" do
+      client.direct!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:headers => { "Accept" => "application/vnd.animoto.directing_job-v1+json" })
+    end
+    
+    it "should send the serialized manifest as the request body" do
+      client.direct!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:body => client.response_parser.unparse(@manifest.to_hash))
+    end
+
+    it "should give the request body in the proper format" do
+      client.direct!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:headers => { "Content-Type" => "application/vnd.animoto.directing_manifest-v1+json" })
+    end
+    
+    it "should return a directing job" do
+      client.direct!(@manifest).should be_an_instance_of(Animoto::Resources::Jobs::Directing)
+    end
+  end
+  
+  describe "rendering" do
+    before do
+      @manifest = Animoto::Manifests::Rendering.new
+      hash = {'response'=>{'status'=>{'code'=>201},'payload'=>{'rendering_job'=>{'state'=>'rendering','links'=>{'self'=>'https://platform.animoto.com/jobs/rendering/1'}}}}}
+      body = client.response_parser.unparse(hash)
+      @endpoint = client.endpoint.sub('https://','https://joe:secret@').chomp('/') + Animoto::Resources::Jobs::Rendering.endpoint
+      stub_request(:post, @endpoint).to_return(:body => body, :status => [201,"Created"])
+    end
+    
+    it "should make a POST request to the rendering jobs' endpoint" do
+      client.render!(@manifest)
+      WebMock.should have_requested(:post, @endpoint)
+    end
+    
+    it "should ask for a response in the proper format" do
+      client.render!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:headers => { "Accept" => "application/vnd.animoto.rendering_job-v1+json" })
+    end
+    
+    it "should send the serialized manifest as the request body" do
+      client.render!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:body => client.response_parser.unparse(@manifest.to_hash))
+    end
+
+    it "should give the request body in the proper format" do
+      client.render!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:headers => { "Content-Type" => "application/vnd.animoto.rendering_manifest-v1+json" })
+    end
+    
+    it "should return a rendering job" do
+      client.render!(@manifest).should be_an_instance_of(Animoto::Resources::Jobs::Rendering)
+    end
+  end
+  
+  describe "directing and rendering" do
+    before do
+      @manifest = Animoto::Manifests::DirectingAndRendering.new
+      hash = {'response'=>{'status'=>{'code'=>201},'payload'=>{'directing_and_rendering_job'=>{'state'=>'retrieving_assets','links'=>{'self'=>'https://platform.animoto.com/jobs/directing_and_rendering/1'}}}}}
+      body = client.response_parser.unparse(hash)
+      @endpoint = client.endpoint.sub('https://','https://joe:secret@').chomp('/') + Animoto::Resources::Jobs::DirectingAndRendering.endpoint
+      stub_request(:post, @endpoint).to_return(:body => body, :status => [201,"Created"])
+    end
+    
+    it "should make a POST request to the directing_and_rendering jobs' endpoint" do
+      client.direct_and_render!(@manifest)
+      WebMock.should have_requested(:post, @endpoint)
+    end
+    
+    it "should ask for a response in the proper format" do
+      client.direct_and_render!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:headers => { "Accept" => "application/vnd.animoto.directing_and_rendering_job-v1+json" })
+    end
+    
+    it "should send the serialized manifest as the request body" do
+      client.direct_and_render!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:body => client.response_parser.unparse(@manifest.to_hash))
+    end
+
+    it "should give the request body in the proper format" do
+      client.direct_and_render!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:headers => { "Content-Type" => "application/vnd.animoto.directing_and_rendering_manifest-v1+json" })
+    end
+    
+    it "should return a directing job" do
+      client.direct_and_render!(@manifest).should be_an_instance_of(Animoto::Resources::Jobs::DirectingAndRendering)
+    end
+  end
+  
+  describe "bundling" do
+    before do
+      @manifest = Animoto::Manifests::StoryboardBundling.new
+      hash = {'response'=>{'status'=>{'code'=>201},'payload'=>{'storyboard_bundling_job'=>{'state'=>'bundling','links'=>{'self'=>'https://platform.animoto.com/jobs/storyboard_bundling/1'}}}}}
+      body = client.response_parser.unparse(hash)
+      @endpoint = client.endpoint.sub('https://','https://joe:secret@').chomp('/') + Animoto::Resources::Jobs::StoryboardBundling.endpoint
+      stub_request(:post, @endpoint).to_return(:body => body, :status => [201,"Created"])
+    end
+    
+    it "should make a POST request to the bundling jobs' endpoint" do
+      client.bundle!(@manifest)
+      WebMock.should have_requested(:post, @endpoint)
+    end
+    
+    it "should ask for a response in the proper format" do
+      client.bundle!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:headers => { "Accept" => "application/vnd.animoto.storyboard_bundling_job-v1+json" })
+    end
+    
+    it "should send the serialized manifest as the request body" do
+      client.bundle!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:body => client.response_parser.unparse(@manifest.to_hash))
+    end
+
+    it "should give the request body in the proper format" do
+      client.bundle!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:headers => { "Content-Type" => "application/vnd.animoto.storyboard_bundling_manifest-v1+json" })
+    end
+    
+    it "should return a directing job" do
+      client.bundle!(@manifest).should be_an_instance_of(Animoto::Resources::Jobs::StoryboardBundling)
+    end
+  end
+  
+  describe "unbundling" do
+    before do
+      @manifest = Animoto::Manifests::StoryboardUnbundling.new
+      hash = {'response'=>{'status'=>{'code'=>201},'payload'=>{'storyboard_unbundling_job'=>{'state'=>'unbundling','links'=>{'self'=>'https://platform.animoto.com/jobs/storyboard_unbundling/1'}}}}}
+      body = client.response_parser.unparse(hash)
+      @endpoint = client.endpoint.sub('https://','https://joe:secret@').chomp('/') + Animoto::Resources::Jobs::StoryboardUnbundling.endpoint
+      stub_request(:post, @endpoint).to_return(:body => body, :status => [201,"Created"])
+    end
+    
+    it "should make a POST request to the storyboard unbundling jobs' endpoint" do
+      client.unbundle!(@manifest)
+      WebMock.should have_requested(:post, @endpoint)
+    end
+    
+    it "should ask for a response in the proper format" do
+      client.unbundle!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:headers => { "Accept" => "application/vnd.animoto.storyboard_unbundling_job-v1+json" })
+    end
+    
+    it "should send the serialized manifest as the request body" do
+      client.unbundle!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:body => client.response_parser.unparse(@manifest.to_hash))
+    end
+
+    it "should give the request body in the proper format" do
+      client.unbundle!(@manifest)
+      WebMock.should have_requested(:post, @endpoint).with(:headers => { "Content-Type" => "application/vnd.animoto.storyboard_unbundling_manifest-v1+json" })
+    end
+    
+    it "should return a directing job" do
+      client.unbundle!(@manifest).should be_an_instance_of(Animoto::Resources::Jobs::StoryboardUnbundling)
+    end    
+  end
 end

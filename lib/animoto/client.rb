@@ -189,6 +189,24 @@ module Animoto
       Resources::Jobs::DirectingAndRendering.load(send_manifest(manifest, Resources::Jobs::DirectingAndRendering.endpoint, options))
     end
     
+    # Sends a request to bundle a storyboard.
+    #
+    # @param [Manifests::StoryboardBundling] manifest the manifest to bundle
+    # @param [Hash{Symbol=>Object}] options
+    # @return [Jobs::StoryboardBundling] a job to monitor the status of the storyboard bundling
+    def bundle! manifest, options = {}
+      Resources::Jobs::StoryboardBundling.load(send_manifest(manifest, Resources::Jobs::StoryboardBundling.endpoint, options))
+    end
+
+    # Sends a request to unbundle a storyboard.
+    #
+    # @param [Manifests::StoryboardUnbundling] manifest the manifest to unbundle
+    # @param [Hash{Symbol=>Object}] options
+    # @return [Jobs::StoryboardUnbundling] a job to monitor the status of the storyboard unbundling
+    def unbundle! manifest, options = {}
+      Resources::Jobs::StoryboardUnbundling.load(send_manifest(manifest, Resources::Jobs::StoryboardUnbundling.endpoint, options))
+    end
+    
     # Update a resource with the latest attributes. Useful to update the state of a Job to
     # see if it's ready if you are not using HTTP callbacks.
     #
@@ -197,6 +215,15 @@ module Animoto
     # @return [Resources::Base] the given resource with the latest attributes
     def reload! resource, options = {}
       resource.load(find_request(resource.class, resource.url, options))
+    end
+    
+    # Delete a resource. May not supported for all types of resources.
+    #
+    # @param [Resources::Base] resource to delete
+    # @param [Hash{Symbol=>Object}] options
+    # @return [Boolean] true if deletion was successful
+    def delete! resource, options = {}
+      request(:delete, resource.url, nil)
     end
     
     private
@@ -212,7 +239,6 @@ module Animoto
       config = if File.exist?(current_path)
         YAML.load(File.read(current_path))
       elsif File.exist?(home_path)
-        home_path = File.expand_path '~/.animotorc'
         YAML.load(File.read(home_path))
       elsif File.exist?('/etc/.animotorc')
         YAML.load(File.read('/etc/.animotorc'))
@@ -248,7 +274,7 @@ module Animoto
         :post,
         u.to_s,
         response_parser.unparse(manifest.to_hash),
-        { "Accept" => "application/#{response_parser.format}", "Content-Type" => content_type_of(manifest) },
+        { "Accept" => content_type_of(manifest.associated_job_class), "Content-Type" => content_type_of(manifest) },
         options
       )
     end
@@ -261,33 +287,25 @@ module Animoto
     # @param [Hash{String=>String}] headers the request headers (will be sent as-is, which means you should
     #   specify "Content-Type" => "..." instead of, say, :content_type => "...")
     # @param [Hash{Symbol=>Object}] options
-    # @return [Hash{String=>Object}] deserialized response body
-    # @raise [Error]
+    # @return [Hash{String=>Object},Boolean] deserialized response body, or boolean indicating success or failure
+    # @raise [HTTPError] if something goes wrong with the request or response
     def request method, url, body, headers = {}, options = {}
-      code, body = catch(:fail) do
-        options = { :username => @key, :password => @secret }.merge(options)
-        @logger.info "Sending request to #{url.inspect} with body #{body}"
-        response = http_engine.request(method, url, body, headers, options)
-        @logger.info "Received response #{response.inspect}"
-        return response_parser.parse(response)
-      end
-      if code
-        if body.empty?
-          @logger.error "HTTP error (#{code})"
-          raise Animoto::Error.new("HTTP error (#{code})")
-        else
-          errors = response_parser.parse(body)['response']['status']['errors']
-          err_string = errors.collect { |e| e['message'] }.join(', ')
-          @logger.error "Error response from server: #{err_string}"
-          raise Animoto::Error.new(err_string)
-        end
+      options = { :username => @key, :password => @secret }.merge(options)
+      @logger.info "Sending request to #{url.inspect} with body #{body}"
+      code, response_body = http_engine.request(method, url, body, headers, options)
+      if method == :head
+        (200..299) === code || raise(Animoto::HTTPError.new(url, code))
       else
-        @logger.error "Error sending request to #{url.inspect}"
-        raise Animoto::Error
+        case code
+        when 204, 205
+          true
+        when (200..299)
+          response_parser.parse(response_body)
+        else
+          parsed_response = begin response_body ? response_parser.parse(response_body) : nil rescue nil end
+          raise Animoto::HTTPError.new(url, code, parsed_response)
+        end
       end
-    rescue NoMethodError => e
-      @logger.error e.inspect
-      raise Animoto::Error.new("Invalid response (#{e.inspect})")
     end
     
     # Creates the full content type string given a Resource class or instance
