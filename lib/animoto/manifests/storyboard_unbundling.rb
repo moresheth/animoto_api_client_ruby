@@ -30,7 +30,7 @@ module Animoto
         job   = hash['storyboard_unbundling_job']
         add_callback_information job
         manifest = job['storyboard_unbundling_manifest']
-        manifest['storyboard_bundle_url'] = bundle_url
+        manifest['bundle_url'] = bundle_url
         hash
       end
       
