@@ -8,7 +8,7 @@ module Animoto
       # @return [Hash{Object=>Object}] a new hash with only the listed keys
       def only *keys
         self.delete_if { |k,v| !keys.include?(k) }
-      end
+      end unless {}.respond_to?(:only)
       
       # Returns a new hash with all keys from this hash except the listed ones.
       #
@@ -16,7 +16,7 @@ module Animoto
       # @return [Hash{Object=>Object}] a new hash without the listed keys
       def except *keys
         self.delete_if { |k,v| keys.include?(v) }
-      end
+      end unless {}.respond_to?(:except)
       
     end
   end
