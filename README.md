@@ -156,8 +156,8 @@ status.
     
     # Poll the service until the directing job is done.
     while directing_job.pending?
-    	sleep(30)
-    	client.reload!(directing_job)
+      sleep(30)
+      client.reload!(directing_job)
     end
 
     # If the directing job finished successfully, there will be a "storyboard" 
@@ -166,36 +166,104 @@ status.
     
       # Now it's time to render the storyboard into a video.  First we create
       # a rendering manifest.
-    	manifest = Manifests::Rendering.new(
-    	  storyboard,
-    	  :resolution => "720p",
-    	  :framerate => 24,
-    	  :format => 'h264'
-    	)
-    	
-    	# Send the manifest to the API.
-    	rendering_job = client.render!(manifest)
-    	
-    	# Poll the service until the rendering job is done
-    	while rendering_job.pending?
-    		sleep(30)
-    		client.reload!(rendering_job)
-    	end
+      manifest = Manifests::Rendering.new(
+        storyboard,
+        :resolution => "720p",
+        :framerate => 24,
+        :format => 'h264'
+      )
+      
+      # Send the manifest to the API.
+      rendering_job = client.render!(manifest)
+      
+      # Poll the service until the rendering job is done
+      while rendering_job.pending?
+        sleep(30)
+        client.reload!(rendering_job)
+      end
 
       # If the job has a video associated with it, everything worked out ok.
-    	if video = rendering_job.video
-    	  # Print a link to download the video file.
-    	  client.reload!(video)
-    		puts video.download_url
-    	else
-    	  # Something happened during rendering...
-    		raise rendering_job.errors.first
-    	end
+      if video = rendering_job.video
+        # Print a link to download the video file.
+        client.reload!(video)
+        puts video.download_url
+      else
+        # Something happened during rendering...
+        raise rendering_job.errors.first
+      end
     else
       # Looks like there was a problem. Perhaps one of the assets wasn't 
       # retrieved or was corrupt...
-    	raise directing_job.errors.first
+      raise directing_job.errors.first
     end
+
+### Storyboard bundling example
+
+Bundling is a process used for exporting an Animoto storyboard. The bundling process packages
+up all the information used by Animoto to render videos into a single file, the storyboard
+bundle. This file is essentially just a zip file with a special structure. After a storyboard
+bundle has been created and retrieved by your system, the original storyboard can be deleted.
+Later, the storyboard bundle can be reconstituted into an Animoto storyboard so that videos may
+be rendered.
+
+    require 'animoto/client'
+    include Animoto
+    
+    client = Client.new("key", "secret")
+    
+    # Make a directing manifest and direct it as detailed above.
+    # Afterwards, we can make a StoryboardBundling manifest and bundle up the
+    # storyboard we just made.
+    
+    storyboard = directing_job.storyboard
+    bundling_manifest = Manifests::StoryboardBundling.new(storyboard)
+    bundling_job = client.bundle!(bundling_manifest)
+    
+    # Poll the service until the bundling job is complete.
+    # As with all jobs, HTTP callbacks are also supported, but we're just
+    # going for a simple example here.
+    while bundling_job.pending?
+      sleep(30)
+      client.reload!(bundling_job)
+    end
+    
+    # The bundle_url returned points to where you can download the storyboard
+    # bundle. Downloading the bundle and archiving it elsewhere is outside the
+    # scope of the client's functionality.
+    puts bundling_job.bundle_url
+    
+    # After you have a handle for the storyboard bundle, the original storyboard
+    # can be deleted.
+    client.delete!(storyboard)
+    
+Turning a bundle back into a storyboard is just as simple.
+
+    require 'animoto/client'
+    include Animoto
+    
+    client = Client.new("key", "secret")
+    
+    # Make a storyboard unbundling manifest with the url to your archived storyboard bundle.
+    unbundling_manifest = Manifest::StoryboardUnbundling.new(:bundle_url => "http://your-storage-solution.com/path/to/your/bundle")
+    unbundling_job = client.unbundle!(unbundling_manifest)
+    
+    # Poll the service until unbundling is complete.
+    while unbundling_job.pending?
+      sleep(30)
+      client.reload!(unbundling_job)
+    end
+    
+    # Now you can use the storyboard to render a video.
+    rendering_manifest = Manifests::Rendering.new(
+      unbundling_job.storyboard,
+      :resolution => "720p",
+      :framerate => 24,
+      :format => 'h264'
+    )
+    rendering_job = client.render!(rendering_manifest)
+    
+    # Now proceed with using your render as detailed above.
+    
 
 <a name="how_to_contribute"></a>
 ## How to contribute to this client
