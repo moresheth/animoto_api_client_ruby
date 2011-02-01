@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
   s.require_paths = ["lib"]
   s.homepage = "http://animoto.com"
-  s.summary = ""
-  s.description = ""
+  s.summary = "Client for working with the Animoto RESTful HTTP API"
+  s.description = "The Animoto API is a RESTful web service that transforms images, videos, music, and text into amazing video presentations. The Animoto API Ruby Client provides a convenient Ruby interface for working with the Animoto RESTful HTTP API."
   s.add_runtime_dependency "json", ["> 0.0.0"]
 end
