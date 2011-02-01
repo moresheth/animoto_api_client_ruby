@@ -34,9 +34,9 @@ describe Animoto::Manifests::StoryboardUnbundling do
       @manifest.to_hash['storyboard_unbundling_job']['storyboard_unbundling_manifest'].should be_a(Hash)
     end
     
-    it "should have a storyboard_bundle_url key in the manifest, whose value is the bundle's URL" do
-      @manifest.to_hash['storyboard_unbundling_job']['storyboard_unbundling_manifest'].should have_key('storyboard_bundle_url')
-      @manifest.to_hash['storyboard_unbundling_job']['storyboard_unbundling_manifest']['storyboard_bundle_url'].should == @bundle_url
+    it "should have a bundle_url key in the manifest, whose value is the bundle's URL" do
+      @manifest.to_hash['storyboard_unbundling_job']['storyboard_unbundling_manifest'].should have_key('bundle_url')
+      @manifest.to_hash['storyboard_unbundling_job']['storyboard_unbundling_manifest']['bundle_url'].should == @bundle_url
     end
 
     describe "when a callback is set" do
