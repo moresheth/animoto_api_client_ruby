@@ -42,7 +42,7 @@ Or by cloning [the repository](http://github.com/animoto/animoto_api_client_ruby
     git clone git://github.com/animoto/animoto_api_client_ruby.git
     cd animoto_api_client_ruby
     gem build animoto.gemspec
-    gem install animoto-1.0.0.gem
+    gem install animoto-1.1.0.gem
 
 ### Prerequisites
 
