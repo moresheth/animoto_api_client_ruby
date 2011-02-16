@@ -22,10 +22,14 @@ module Animoto
       # @return [Curl::Easy] the Easy instance
       def build_curl method, url, body, headers, options
         ::Curl::Easy.new(url) do |c|
+          c.http_auth_types = Curl::CURLAUTH_BASIC
           c.username = options[:username]
           c.password = options[:password]
           c.timeout = options[:timeout]
           c.post_body = body
+          c.ssl_verify_host = false
+          c.ssl_verify_peer = false
+          c.proxy_url = options[:proxy]
           headers.each { |header, value| c.headers[header] = value }
         end
       end
