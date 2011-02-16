@@ -46,7 +46,7 @@ module Animoto
       # @return [Assets::TitleCard] the new TitleCard
       # @see Animoto::Assets::TitleCard#initialize
       def add_title_card *args
-        card = Assets::TitleCard.new *args
+        card = Assets::TitleCard.new(*args)
         @visuals << card
         card
       end
@@ -57,7 +57,7 @@ module Animoto
       # @return [Assets::Image] the new Image
       # @see Animoto::Assets::Image#initialize
       def add_image *args
-        image = Assets::Image.new *args
+        image = Assets::Image.new(*args)
         @visuals << image
         image
       end
@@ -68,7 +68,7 @@ module Animoto
       # @return [Assets::Footage] the new Footage
       # @see Animoto::Assets::Footage#initialize
       def add_footage *args
-        footage = Assets::Footage.new *args
+        footage = Assets::Footage.new(*args)
         @visuals << footage
         footage
       end
@@ -80,7 +80,7 @@ module Animoto
       # @return [Assets::Song] the new Song
       # @see Animoto::Assets::Song#initialize
       def add_song *args
-        @song = Assets::Song.new *args
+        @song = Assets::Song.new(*args)
       end
 
       # Adds a visual/song to this manifest.

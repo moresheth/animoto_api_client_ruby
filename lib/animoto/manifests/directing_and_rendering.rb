@@ -37,9 +37,9 @@ module Animoto
       def method_missing *args
         name = args.first
         if directing_manifest.respond_to?(name)
-          directing_manifest.__send__ *args
+          directing_manifest.__send__(*args)
         elsif rendering_manifest.respond_to?(name)
-          rendering_manifest.__send__ *args
+          rendering_manifest.__send__(*args)
         else
           super
         end
