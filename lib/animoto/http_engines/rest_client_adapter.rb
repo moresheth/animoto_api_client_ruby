@@ -6,6 +6,7 @@ module Animoto
       
       # @return [String]
       def request method, url, body = nil, headers = {}, options = {}
+        RestClient.proxy = options[:proxy]
         response = ::RestClient::Request.execute({
           :method => method,
           :url => url,
