@@ -17,7 +17,7 @@ module Animoto
       # @return [String]
       def request method, url, body = nil, headers = {}, options = {}
         uri = URI.parse(url)
-        http = build_http uri
+        http = build_http uri, options
         req = build_request method, uri, body, headers, options        
         response = http.request req
         [response.code.to_i, response.body]
@@ -29,8 +29,14 @@ module Animoto
       #
       # @param [URI] uri a URI object of the request URL
       # @return [Net::HTTP] the HTTP object
-      def build_http uri
-        http = Net::HTTP.new uri.host, uri.port
+      def build_http uri, options
+        http = if options[:proxy]
+          proxy_uri = URI.parse(options[:proxy])
+          Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new uri.host, uri.port
+        else
+          Net::HTTP.new uri.host, uri.port
+        end
+        http.read_timeout = options[:timeout]
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         http
