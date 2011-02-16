@@ -12,7 +12,9 @@ module Animoto
           :headers => headers,
           :timeout => options[:timeout],
           :username => options[:username],
-          :password => options[:password]
+          :password => options[:password],
+          :disable_ssl_peer_verification => true,
+          :proxy => options[:proxy]
         })
         [response.code, response.body]
       end   
