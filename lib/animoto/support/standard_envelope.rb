@@ -25,6 +25,7 @@ module Animoto
         if payload_key = unpack_base_payload(envelope).keys.first
           klass_name = payload_key.camelize
           if /(?:Job|Callback)$/ === klass_name
+            klass_name.sub!(/(?:Job|Callback)$/, '')
             Animoto::Resources::Jobs::const_get(klass_name) if Animoto::Resources::Jobs::const_defined?(klass_name)
           else
             Animoto::Resources::const_get(klass_name) if Animoto::Resources::const_defined?(klass_name)
