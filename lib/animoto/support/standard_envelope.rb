@@ -112,9 +112,7 @@ module Animoto
             :errors => unpack_status(body)['errors'] || []
           }
         end        
-      end
-      
-      extend ClassMethods
+      end      
     end
   end
 end
