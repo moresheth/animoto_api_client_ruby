@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
 
 describe Animoto::Resources::Jobs::Rendering do
   
-  it "should have endpoint /jobs/rendering" do
+  it "should have endpoint '/jobs/rendering'" do
     Animoto::Resources::Jobs::Rendering.endpoint.should == '/jobs/rendering'
   end
   

@@ -2,15 +2,15 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../spec_helper")
 
 describe Animoto::Resources::Jobs::StoryboardUnbundling do
 
-  it "should have endpoint /jobs/storyboard_unbundling" do
+  it "should have endpoint '/jobs/storyboard_unbundling'" do
     Animoto::Resources::Jobs::StoryboardUnbundling.endpoint.should == '/jobs/storyboard_unbundling'
   end
   
-  it "should have content type 'application/vnd.animoto.storyboard_unbundling_job" do
+  it "should have content type 'application/vnd.animoto.storyboard_unbundling_job'" do
     Animoto::Resources::Jobs::StoryboardUnbundling.content_type.should == 'storyboard_unbundling_job'
   end
   
-  it "should have payload key storyboard_unbundling_job" do
+  it "should have payload key 'storyboard_unbundling_job'" do
     Animoto::Resources::Jobs::StoryboardUnbundling.payload_key.should == 'storyboard_unbundling_job'
   end
 
