@@ -15,11 +15,12 @@ module Animoto
         links = unpack_links(body)
         params = unpack_rendering_parameters(body)
         super.merge({
-          :download_url   => links['file'],
-          :storyboard_url => links['storyboard'],
-          :format         => params['format'],
-          :framerate      => params['framerate'],
-          :resolution     => params['resolution']
+          :download_url     => links['file'],
+          :storyboard_url   => links['storyboard'],
+          :cover_image_url  => links['cover_image'],
+          :format           => params['format'],
+          :framerate        => params['framerate'],
+          :resolution       => params['resolution']
         })
       end
 
@@ -34,6 +35,10 @@ module Animoto
       # The Storyboard object this video was rendered from.
       # @return [Resources::Storyboard]
       attr_reader :storyboard
+      
+      # In available, the URL to the cover image file.
+      # @return [String]
+      attr_reader :cover_image_url
       
       # The format of the video.
       # @return [String]
@@ -61,6 +66,7 @@ module Animoto
         @download_url = attributes[:download_url]
         @storyboard_url = attributes[:storyboard_url]
         @storyboard = Animoto::Resources::Storyboard.new(:url => @storyboard_url) if @storyboard_url
+        @cover_image_url = attributes[:cover_image_url]
         @format = attributes[:format]
         @framerate = attributes[:framerate]
         @resolution = attributes[:resolution]
