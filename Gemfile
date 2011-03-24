@@ -13,4 +13,5 @@ group :test do
   gem "rspec"
   gem "mocha"
   gem "webmock"
+  gem "rcov"
 end

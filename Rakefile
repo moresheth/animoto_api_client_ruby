@@ -7,6 +7,13 @@ namespace :test do
   RSpec::Core::RakeTask.new('spec') do |t|
     t.pattern = 'spec/**/*_spec.rb'
   end
+  
+  namespace :spec do
+    RSpec::Core::RakeTask.new('rcov') do |t|
+      t.pattern = 'spec/**/*_spec.rb'
+      t.rcov = true
+    end
+  end
 end
 
 namespace :docs do
