@@ -4,3 +4,4 @@ doc
 integration/*.yml
 .bundle/*
 Gemfile.lock
+coverage/*
