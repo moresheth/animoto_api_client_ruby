@@ -3,13 +3,11 @@ require 'uri'
 require 'logger'
 
 require 'animoto/support/content_type'
-require 'animoto/support/coverable'
 require 'animoto/support/dynamic_class_loader'
 require 'animoto/support/errors'
 require 'animoto/support/hash'
 require 'animoto/support/standard_envelope'
 require 'animoto/support/string'
-require 'animoto/support/visual'
 
 require 'animoto/resources/base'
 require 'animoto/resources/storyboard'
