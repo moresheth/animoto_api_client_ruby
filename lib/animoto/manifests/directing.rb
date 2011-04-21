@@ -11,8 +11,8 @@ module Animoto
       # @return [String]
       attr_accessor :pacing
       
-      # The array of Visual objects in this manifest.
-      # @return [Array<Support::Visual>]
+      # The array of visual objects in this manifest.
+      # @return [Array<Assets::Base,Assets::TitleCard>]
       attr_reader   :visuals
       
       # The song for this video.
@@ -85,14 +85,14 @@ module Animoto
 
       # Adds a visual/song to this manifest.
       #
-      # @param [Support::Visual,Assets::Song] asset the asset to add
+      # @param [Assets::Base,Assets::TitleCard] asset the asset to add
       # @return [void]
-      # @raise [ArgumentError] if the asset isn't a Song or Visual
+      # @raise [ArgumentError] if the asset isn't a Song, Image, Footage, or TitleCard
       def add_visual asset
         case asset
         when Animoto::Assets::Song
           @song = asset
-        when Animoto::Support::Visual
+        when Animoto::Assets::Base, Animoto::Assets::TitleCard
           @visuals << asset
         else
           raise ArgumentError
@@ -101,7 +101,7 @@ module Animoto
 
       # Adds a visual/song to this manifest.
       #
-      # @param [Support::Visual,Assets::Song] asset the asset to add
+      # @param [Assets::Base,Assets::TitleCard] asset the asset to add
       # @return [self]
       def << asset
         add_visual asset
