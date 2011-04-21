@@ -2,10 +2,29 @@ require File.expand_path(File.dirname(__FILE__) + "/../../spec_helper")
 
 describe Animoto::Assets::Image do
   
-  it "should be a visual" do
-    Animoto::Assets::Image.should include(Animoto::Support::Visual)
+  describe "initialization" do
+    before do
+      @image = Animoto::Assets::Image.new 'http://website.com/image.png',
+        :rotation => 2, :spotlit => true, :cover => true
+    end
+    
+    it "should set the source to the given url" do
+      @image.source.should == 'http://website.com/image.png'
+    end
+    
+    it "should set the rotation to the given amount" do
+      @image.rotation.should == 2
+    end
+    
+    it "should set the spotlighting to the given value" do
+      @image.should be_spotlit
+    end
+    
+    it "should set the cover to the given value" do
+      @image.should be_a_cover
+    end
   end
-  
+
   describe "#to_hash" do
     before do
       @image = Animoto::Assets::Image.new 'http://website.com/image.png'
@@ -21,7 +40,7 @@ describe Animoto::Assets::Image do
         @image.rotation = 2
       end
       
-      it "should have a 'rotation' key with the EXIF rotation value" do
+      it "should have a 'rotation' key with the rotation value" do
         @image.to_hash.should have_key('rotation')
         @image.to_hash['rotation'].should == @image.rotation
       end
@@ -35,6 +54,17 @@ describe Animoto::Assets::Image do
       it "should have a 'spotlit' key telling whether or not this image is spotlit" do
         @image.to_hash.should have_key('spotlit')
         @image.to_hash['spotlit'].should == @image.spotlit?
+      end
+    end
+    
+    describe "if this image is the cover" do
+      before do
+        @image.cover = true
+      end
+      
+      it "should have a 'cover' key telling whether or not this image is the cover" do
+        @image.to_hash.should have_key('cover')
+        @image.to_hash['cover'].should == @image.cover?
       end
     end
   end

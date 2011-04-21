@@ -11,6 +11,7 @@ module Animoto
       # Creates a new asset.
       #
       # @param [String] source the URL of this asset
+      # @param [Hash{Symbol=>Object}] options
       # @return [Assets::Base] the asset
       def initialize source, options = {}
         @source = source
@@ -21,7 +22,7 @@ module Animoto
       #
       # @return [Hash{String=>Object}] this asset as a Hash
       def to_hash
-        { 'source_url' => @source }
+        { 'source_url' => @source, 'type' => self.class.name.split('::').last.underscore }
       end
 
     end

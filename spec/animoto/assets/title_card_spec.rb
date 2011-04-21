@@ -2,10 +2,24 @@ require File.expand_path(File.dirname(__FILE__) + "/../../spec_helper")
 
 describe Animoto::Assets::TitleCard do
   
-  it "should be a visual" do
-    Animoto::Assets::TitleCard.should include(Animoto::Support::Visual)
+  describe "initialization" do
+    before do
+      @card = Animoto::Assets::TitleCard.new "hooray", "for everything", :spotlit => true
+    end
+    
+    it "should set the title to the given string" do
+      @card.title.should == 'hooray'
+    end
+    
+    it "should set the subtitle to the given string" do
+      @card.subtitle.should == 'for everything'
+    end
+    
+    it "should set the spotlighting to the given value" do
+      @card.should be_spotlit
+    end
   end
-  
+
   describe "#to_hash" do
     before do
       @card = Animoto::Assets::TitleCard.new("hooray")
