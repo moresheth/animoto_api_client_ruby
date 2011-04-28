@@ -36,7 +36,7 @@ module Animoto
       #
       # @return [Hash{String=>Object}] this TitleCard as a Hash
       def to_hash
-        hash = {}
+        hash = { 'type' => 'title_card' }
         hash['h1'] = title
         hash['h2'] = subtitle if subtitle
         hash['spotlit'] = spotlit? unless @spotlit.nil?

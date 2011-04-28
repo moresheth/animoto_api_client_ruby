@@ -25,6 +25,11 @@ describe Animoto::Assets::TitleCard do
       @card = Animoto::Assets::TitleCard.new("hooray")
     end
     
+    it "should have type 'title_card'" do
+      @card.to_hash.should have_key('type')
+      @card.to_hash['type'].should == 'title_card'
+    end
+
     it "should have an 'h1' key with the title" do
       @card.to_hash.should have_key('h1')
       @card.to_hash['h1'].should == @card.title
