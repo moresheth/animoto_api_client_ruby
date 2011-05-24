@@ -24,7 +24,8 @@ describe Animoto::Resources::Jobs::DirectingAndRendering do
               'state' => 'completed',
               'links' => {
                 'self' => 'http://animoto.com/jobs/directing_and_rendering/1',
-                'video' => 'http://animoto.com/videos/1'
+                'video' => 'http://animoto.com/videos/1',
+                'stream' => 'http://animoto.com/streams/1.m3u8'
               }
             }
           }
@@ -40,6 +41,10 @@ describe Animoto::Resources::Jobs::DirectingAndRendering do
     it "should create a video from the video url" do
       @job.video.should be_an_instance_of(Animoto::Resources::Video)
       @job.video.url.should == @job.video_url
+    end
+
+    it "should set its stream_url from the 'stream' link given" do
+      @job.stream_url.should == 'http://animoto.com/streams/1.m3u8'
     end
   end  
 end

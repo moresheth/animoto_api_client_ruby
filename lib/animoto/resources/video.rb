@@ -18,6 +18,7 @@ module Animoto
           :download_url     => links['file'],
           :storyboard_url   => links['storyboard'],
           :cover_image_url  => links['cover_image'],
+          :stream_url       => links['stream'],
           :format           => params['format'],
           :framerate        => params['framerate'],
           :resolution       => params['resolution']
@@ -36,10 +37,14 @@ module Animoto
       # @return [Resources::Storyboard]
       attr_reader :storyboard
       
-      # In available, the URL to the cover image file.
+      # If available, the URL to the cover image file.
       # @return [String]
       attr_reader :cover_image_url
       
+      # If available, the URL where this video can be watched via HTTP Live Streaming.
+      # @return [String]
+      attr_reader :stream_url
+
       # The format of the video.
       # @return [String]
       attr_reader :format
@@ -57,6 +62,7 @@ module Animoto
       # @param [Hash{Symbol=>Object}] attributes
       # @option attributes [String] :download_url the URL where this video can be downloaded
       # @option attributes [String] :storyboard_url the URL for this video's storyboard
+      # @option attributes [String] :stream_url the URL for this video's HTTP Live Streaming playlist
       # @option attributes [String] :format the format of this video
       # @option attributes [Integer] :framerate the framerate of this video
       # @option attributes [String] :resolution the vertical resolution of this video
@@ -67,6 +73,7 @@ module Animoto
         @storyboard_url = attributes[:storyboard_url]
         @storyboard = Animoto::Resources::Storyboard.new(:url => @storyboard_url) if @storyboard_url
         @cover_image_url = attributes[:cover_image_url]
+        @stream_url = attributes[:stream_url]
         @format = attributes[:format]
         @framerate = attributes[:framerate]
         @resolution = attributes[:resolution]

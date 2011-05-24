@@ -9,7 +9,8 @@ module Animoto
           links = unpack_links(body)
           super.merge({
             :storyboard_url => links['storyboard'],
-            :video_url      => links['video']
+            :video_url      => links['video'],
+            :stream_url     => links['stream']
           })
         end
     
@@ -30,6 +31,13 @@ module Animoto
         # @note This URL points to the video *resource* and not the actual video *file*.
         # @return [String]
         attr_reader :video_url
+
+        # If available, the URL where the video can be watched 'live' via HTTP Live Streaming.
+        #
+        # @note this attribute may not be available when the job is first created. If you poll
+        #   the job while it's rendering, the URL will appear when the stream is available to view.
+        # @return [String]
+        attr_reader :stream_url
     
         # @return [Jobs::Rendering]
         # @see Animoto::Jobs::Base#instantiate
@@ -38,6 +46,7 @@ module Animoto
           @storyboard = Animoto::Resources::Storyboard.new(:url => @storyboard_url) if @storyboard_url
           @video_url = attributes[:video_url]
           @video = Animoto::Resources::Video.new(:url => @video_url) if @video_url
+          @stream_url = attributes[:stream_url]
           super
         end
         

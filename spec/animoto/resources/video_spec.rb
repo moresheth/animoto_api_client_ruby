@@ -30,7 +30,8 @@ describe Animoto::Resources::Video do
                 'self' => 'https://platform.animoto.com/videos/1',
                 'file' => 'http://storage.com/videos/1.mp4',
                 'cover_image' => 'http://storage.com/videos/1/cover_image.jpg',
-                'storyboard' => 'https://platform.animoto.com/storyboards/1'
+                'storyboard' => 'https://platform.animoto.com/storyboards/1',
+                'stream' => 'http://animoto.com/streams/1.m3u8'
               }
             }
           }
@@ -51,12 +52,16 @@ describe Animoto::Resources::Video do
       @video.cover_image_url.should == 'http://storage.com/videos/1/cover_image.jpg'
     end
     
-    it "should set its storyboard url from the 'storyboard_url' given" do
+    it "should set its storyboard url from the 'storyboard' link given" do
       @video.storyboard_url.should == 'https://platform.animoto.com/storyboards/1'
     end
     
     it "should set its storyboard from its storyboard url" do
       @video.storyboard.url.should == 'https://platform.animoto.com/storyboards/1'
+    end
+
+    it "should set its stream url from the 'stream' link given" do
+      @video.stream_url.should == 'http://animoto.com/streams/1.m3u8'
     end
     
     it "should set its format from the format given" do
