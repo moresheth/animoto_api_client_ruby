@@ -11,12 +11,12 @@ describe Animoto::Manifests::Directing do
       manifest(:title => "Funderful Wonderment").title.should == "Funderful Wonderment"
     end
     
-    it "should default to 'default' pacing" do
-      manifest.pacing.should == 'default'
+    it "should default to 'auto' pacing" do
+      manifest.pacing.should == 'auto'
     end
     
     it "should be able to specify the pacing with a :pacing parameter" do
-      manifest(:pacing => 'double').pacing.should == 'double'
+      manifest(:pacing => 'fast').pacing.should == 'fast'
     end
     
     it "should default to 'original' style" do

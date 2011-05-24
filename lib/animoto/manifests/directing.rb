@@ -7,7 +7,11 @@ module Animoto
       attr_accessor :title
       
       # The pacing, representing how quickly the visuals elements will be cycled.
-      # Valid values are 'default', 'half', and 'double'.
+      # Valid values are 'very_slow', 'slow', 'moderate', 'fast', 'very_fast' and 'auto'.
+      # Faster songs will naturally cycle through images faster than slower songs. The
+      # 'moderate' pacing is about 4 beats per image. With 'auto', Animoto's cinematic
+      # artificial intelligence will decide what pacing will be best. The default pacing
+      # is 'auto'.
       # @return [String]
       attr_accessor :pacing
       
@@ -34,7 +38,7 @@ module Animoto
       def initialize options = {}
         super
         @title      = options[:title]
-        @pacing     = options[:pacing] || 'default'
+        @pacing     = options[:pacing] || 'auto'
         @style      = 'original'
         @visuals    = []
         @song       = nil
