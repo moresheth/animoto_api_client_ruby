@@ -31,7 +31,7 @@ module Animoto
       #
       # @param [Hash] options
       # @option options [String] :title the title of this project
-      # @option options [String] :pacing ('default') the pacing for this project
+      # @option options [String] :pacing ('auto') the pacing for this project
       # @option options [String] :http_callback_url a URL to receive a callback when this job is done
       # @option options [String] :http_callback_format the format of the callback
       # @return [Manifests::Directing] the manifest
