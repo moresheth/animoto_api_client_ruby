@@ -50,7 +50,7 @@ module Animoto
         super
         @title      = options[:title]
         @pacing     = options[:pacing]  || 'auto'
-        @style      = options[:style]   || Animoto::Styles::ORIGINAL
+        @style      = options[:style]   || Animoto::Styles::ANIMOTO_ORIGINAL
         @postroll   = Animoto::Postroll.new(options[:postroll] || Animoto::Postroll::POWERED_BY_ANIMOTO)
         @visuals    = []
         @song       = nil

@@ -20,11 +20,11 @@ describe Animoto::Manifests::Directing do
     end
     
     it "should default to 'original' style" do
-      manifest.style.should == Animoto::Styles::ORIGINAL
+      manifest.style.should == Animoto::Styles::ANIMOTO_ORIGINAL
     end
 
     it "should be able to specify the style with a :style parameter" do
-      manifest(:style => Animoto::Styles::VINTAGE).style.should == Animoto::Styles::VINTAGE
+      manifest(:style => Animoto::Styles::VINTAGE_VOYAGE).style.should == Animoto::Styles::VINTAGE_VOYAGE
     end
 
     it "should default to having the 'powered by animoto' postroll" do
