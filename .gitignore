@@ -5,3 +5,4 @@ integration/*.yml
 .bundle/*
 Gemfile.lock
 coverage/*
+.rvmrc
