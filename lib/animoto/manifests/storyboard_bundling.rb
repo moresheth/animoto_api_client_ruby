@@ -16,12 +16,10 @@ module Animoto
       # @param [Hash{Symbol=>Object}] options
       # @option options [String] :http_callback_url a URL to receive a callback when this job is done
       # @option options [String] :http_callback_format the format of the callback
-      def initialize *args
-        options = args.last.is_a?(Hash) ? args.pop : {}
-        super(options)
-        @storyboard = args.shift
-      end
-      
+	  def initialize options = {}
+        super
+        @storyboard = options[:storyboard]
+      end     
       # Returns a representation of this manifest as a Hash.
       #
       # @return [Hash{String=>Object}] this manifest as a Hash
@@ -33,8 +31,7 @@ module Animoto
         manifest = job['storyboard_bundling_manifest']
         manifest['storyboard_url'] = storyboard.url if storyboard
         hash
-      end
-      
+      end      
     end
   end
 end

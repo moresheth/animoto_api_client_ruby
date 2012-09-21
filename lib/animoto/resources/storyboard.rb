@@ -15,7 +15,7 @@ module Animoto
         metadata = unpack_metadata(body)
         super.merge({
           :duration       => metadata['duration'],
-          :visuals_count  => metadata['visuals_count'],
+          :visuals_count  => metadata['visuals'].count(),
           :preview_url    => unpack_links(body)['preview']
         })
       end
@@ -27,11 +27,11 @@ module Animoto
       # The number of visuals (title cards, images, etc.) in this storyboard.
       # @return [Integer]
       attr_reader :visuals_count
-      
+ 	       
       # If available, the URL to the low-resolution 'preview' video.
       # @return [String]
       attr_reader :preview_url
-      
+	
       # Sets the attributes for a new storyboard.
       #
       # @param [Hash] attributes
