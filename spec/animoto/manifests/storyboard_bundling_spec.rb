@@ -8,11 +8,11 @@ describe Animoto::Manifests::StoryboardBundling do
     end
     
     it "should take a storyboard as the first argument" do
-      Animoto::Manifests::StoryboardBundling.new(@storyboard).storyboard.should == @storyboard
+      Animoto::Manifests::StoryboardBundling.new(:storyboard => @storyboard).storyboard.should == @storyboard
     end
     
     it "should take :http_callback_url and :http_callback_format parameters to set the callback" do
-      manifest = Animoto::Manifests::StoryboardBundling.new(@storyboard, :http_callback_url => "http://website.com/callback", :http_callback_format => 'xml')
+      manifest = Animoto::Manifests::StoryboardBundling.new(:storyboard => @storyboard, :http_callback_url => "http://website.com/callback", :http_callback_format => 'xml')
       manifest.http_callback_url.should == "http://website.com/callback"
       manifest.http_callback_format.should == 'xml'
     end
@@ -23,7 +23,7 @@ describe Animoto::Manifests::StoryboardBundling do
       @storyboard = Animoto::Resources::Storyboard.new
       @url = "http://platform.animoto.com/storyboards/1"
       @storyboard.instance_variable_set(:@url, @url)
-      @manifest = Animoto::Manifests::StoryboardBundling.new(@storyboard)
+      @manifest = Animoto::Manifests::StoryboardBundling.new(:storyboard => @storyboard)
     end
 
     it "should have a top-level storyboard_bundling_job object" do
