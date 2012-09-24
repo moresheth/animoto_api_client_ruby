@@ -21,7 +21,10 @@ describe Animoto::Resources::Storyboard do
             'storyboard' => {
               'metadata' => {
                 'duration' => 300.0,
-                'visuals_count' => 60
+                'visuals' => [
+                  "https://foo.com/1",
+                  "https://foo.com/2"
+                ]
               },
               'links' => {
                 'self' => 'https://platform.animoto.com/storyboards/1',
@@ -47,7 +50,7 @@ describe Animoto::Resources::Storyboard do
     end
     
     it "should set its visuals count from the visuals_count metadata given" do
-      @storyboard.visuals_count.should == 60
+      @storyboard.visuals_count.should == 2
     end
   end
   

@@ -113,7 +113,22 @@ describe Animoto::Client do
   describe "finding an instance by identifier" do
     before do
       @url = "https://joe:secret@platform.animoto.com/storyboards/1"
-      hash = {'response'=>{'status'=>{'code'=>200},'payload'=>{'storyboard'=>{'links'=>{'self'=>@url,'preview'=>'http://animoto.com/preview/1.mp4'},'metadata'=>{'duration'=>100,'visuals_count'=>1}}}}}
+      hash = {
+        'response'=>{
+          'status'=>{'code'=>200},
+          'payload'=>{
+            'storyboard'=>{
+              'links'=>{'self'=>@url,'preview'=>'http://animoto.com/preview/1.mp4'},
+              'metadata'=>{
+                'duration'=>100,
+                'visuals' => [
+                  'https://foo.com/1'
+                ]
+              }
+            }
+          }
+        }
+      }
       body = client.response_parser.unparse(hash)
       stub_request(:get, @url).to_return(:body => body, :status => [200,"OK"])
     end
