@@ -27,6 +27,17 @@ module Animoto
         @cover
       end
 
+      # Whether or not this image has a caption. If a caption is added, it will appear with the
+      # image in the video.
+      # @return [Boolean]
+      attr_writer :caption
+
+      # Returns whether or not this image has a caption.
+      # @return [Boolean]
+      def caption?
+        @caption 
+      end    
+
       # Creates a new Image object.
       #
       # @param [String] source the source URL of this image
@@ -51,6 +62,7 @@ module Animoto
         hash['rotation'] = rotation if rotation
         hash['spotlit'] = spotlit? unless @spotlit.nil?
         hash['cover'] = cover? unless @cover.nil?
+        hash['caption'] = caption? unless @caption.nil?
         hash
       end
     end
