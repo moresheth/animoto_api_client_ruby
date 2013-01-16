@@ -6,3 +6,4 @@ integration/*.yml
 Gemfile.lock
 coverage/*
 .rvmrc
+rdoc
