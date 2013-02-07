@@ -6,9 +6,7 @@ module Animoto
 
       # The URL to a video to insert into this custom footage postroll.
       # @return [String]
-      attr_accessor :source_url
-      attr_accessor :start_time
-      attr_accessor :duration
+      attr_accessor :source_url, :start_time, :duration
 
       # Creates a new postroll with custom footage at the supplied
       # URL.
@@ -19,22 +17,6 @@ module Animoto
       def initialize source_url
         super("custom_footage")
         @source_url = source_url
-      end
-
-      def start_time=(start_time)
-        @start_time = start_time
-      end
-
-      def start_time()
-        @start_time
-      end
-
-      def duration=(duration)
-        @duration = duration
-      end
-
-      def duration()
-        @duration
       end
 
       # Returns a representation of this postroll as a hash.
