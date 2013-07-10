@@ -56,8 +56,6 @@ module Animoto
         job   = hash['directing_and_rendering_job']
         add_callback_information job
         add_partner_metadata job
-k = {}
-k['partner_metadata'] = {  "commercial_use" => "FAL===SE"}
         job['directing_manifest'] = self.directing_manifest.to_hash['directing_job']['directing_manifest']
         
         job['rendering_manifest'] = self.rendering_manifest.to_hash['rendering_job']['rendering_manifest']

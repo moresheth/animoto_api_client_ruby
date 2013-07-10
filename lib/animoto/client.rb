@@ -1,5 +1,4 @@
 require 'yaml'
-require 'ruby-debug'
 require 'uri'
 require 'logger'
 

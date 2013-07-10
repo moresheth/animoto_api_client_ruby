@@ -36,11 +36,9 @@ module Animoto
       # @option options [String] :http_callback_url a URL to receive a callback when this job is done
       # @option options [String] :http_callback_format the format of the callback
       def initialize options = {}
-debugger
         @http_callback_url  = options[:http_callback_url]
         @http_callback_format = options[:http_callback_format]
-        @partner_metadata  = {}
-        @partner_metadata["commercial_use"] = "Our=================== Best of 2013"
+        @partner_metadata  = options[:partner_metadata]
       end
 
       # Returns a representation of this manifest as a Hash, used to populate
