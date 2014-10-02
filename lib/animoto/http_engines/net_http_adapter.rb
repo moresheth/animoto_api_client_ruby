@@ -30,9 +30,6 @@ module Animoto
       # @param [URI] uri a URI object of the request URL
       # @return [Net::HTTP] the HTTP object
       def build_http uri, options
-Rails.logger.info("====================================================")
-Rails.logger.info("build_http")
-Rails.logger.info("====================================================")
         http = if options[:proxy]
           proxy_uri = URI.parse(options[:proxy])
           Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new uri.host, uri.port
