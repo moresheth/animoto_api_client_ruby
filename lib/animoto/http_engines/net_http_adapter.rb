@@ -30,6 +30,9 @@ module Animoto
       # @param [URI] uri a URI object of the request URL
       # @return [Net::HTTP] the HTTP object
       def build_http uri, options
+Rails.logger.info("====================================================")
+Rails.logger.info("build_http")
+Rails.logger.info("====================================================")
         http = if options[:proxy]
           proxy_uri = URI.parse(options[:proxy])
           Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new uri.host, uri.port
@@ -38,7 +41,7 @@ module Animoto
         end
         http.read_timeout = options[:timeout]
         http.use_ssl = true
-        http.ssl_version = :SSLv3
+        http.ssl_version = :SSLv2
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         http
       end
