@@ -38,6 +38,7 @@ module Animoto
         end
         http.read_timeout = options[:timeout]
         http.use_ssl = true
+        http.ssl_version = :SSLv3
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         http
       end
